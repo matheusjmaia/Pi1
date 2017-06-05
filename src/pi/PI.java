@@ -11,6 +11,9 @@ import java.util.Scanner;
 public class PI {
 static int subs = 5;
 static int subsaliado = 5;
+static String jogador = "";
+static String computador = "";
+
 static int [][][] criatabuleiro (){
     int tabuleiro [][][] = new int [5][5][2];
     return tabuleiro;
@@ -86,7 +89,44 @@ static void informaSubAliado (){
     subsaliado = subsaliado - 1;
     System.out.println(subs+" submarinos aliados restanstes");
 }
+static boolean jogarNovamente (boolean condicao1){
+    Scanner console = new Scanner (System.in);
+    System.out.println("Deseja jogar novamente? ");
+    String condicao = console.next();
+    condicao = condicao.toLowerCase();
+    if (condicao.equalsIgnoreCase("sim") || condicao.equalsIgnoreCase("ss") || condicao.equalsIgnoreCase("s")){
+                condicao1 = true;
+            }
+return condicao1;
+}
+static void intro (){
+    Scanner console = new Scanner (System.in);
+    System.out.println("Bem vindo a (!NOTguerraFria)");
+    System.out.print("Deseja ler as regras? ");
+    String condicao = console.next();
+    condicao = condicao.toLowerCase();
+    if (condicao.equalsIgnoreCase("sim") || condicao.equalsIgnoreCase("ss") || condicao.equalsIgnoreCase("s")){
+        System.out.println("(!NOTguerraFria) é um jogo de tabuleiro, no qual você têm de adivinhar em que localização estão os submarinos do oponente.");
+        System.out.println("Os submarinos ocupam uma posição do tabuleiro. No total são *5* submarinos para cada tabuleiro");
+        System.out.println("Ganha quem destruir todos os submarinos primeiro!");
+    }
+    System.out.println("selecione uma nação");
+    System.out.print("Digite 1 para URSS ou 2 para U.S.A.");
+    int opcao = console.nextInt();
+    if (opcao==1){
+        computador = " U.S.A. ";
+        jogador = " URSS ";
+    }else if (opcao==2){
+        computador = " URSS ";
+        jogador = " U.S.A. ";
+    }
+}
 public static void main(String[] args) {
+    boolean condicao1 = false;
+    
+    do {
+        
+        System.out.println("Destrua todos os submarinos nucleares da" +computador);
         int [][][] tabuleiroMaquina = criatabuleiro();
         tabuleiroMaquina = inicializatabuleiro(tabuleiroMaquina);
         tabuleiroMaquina = sorteiaPosicao(tabuleiroMaquina);
@@ -94,9 +134,22 @@ public static void main(String[] args) {
         tabuleiroJogador = inicializatabuleiro(tabuleiroJogador);
         tabuleiroJogador = pedirPosicaoInicial(tabuleiroJogador);
         
-        
+        for(int i = 0; i<tabuleiroJogador.length;i++){
         tabuleiroMaquina = jogada(tabuleiroMaquina);
         tabuleiroJogador = jogadaMaquina(tabuleiroJogador);
+        if( subs == 0){
+            System.out.println("Parabéns! Você ganhou!");
+            break;
+        }
+        if (subsaliado == 0){
+            System.out.println("Seus submarinos foram todos afundados...");
+            System.out.println("GAME OVER!");
+            break;
+        }
+        
     }
-    
+        condicao1 = jogarNovamente(condicao1);
+} while (condicao1 == true);
+        
+ }
 }
