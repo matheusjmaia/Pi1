@@ -99,6 +99,7 @@ static boolean jogarNovamente (boolean condicao1){
             }
 return condicao1;
 }
+
 static void intro (){
     Scanner console = new Scanner (System.in);
     System.out.println("Bem vindo a (!NOTguerraFria)");
