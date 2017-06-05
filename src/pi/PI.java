@@ -3,7 +3,10 @@ package pi;
 
 import java.util.Random;
 import java.util.Scanner;
-
+/****************falta:     |VALIDADR AS POSIÇÕES    |
+                            |FAZER TRATAMENTO DE ERRO|
+                            |PERFUMARIA              |
+ ****************           |INTERFACE GRÁFICA       | 
 /**
  *
  * @author matheus.jmaia
@@ -13,6 +16,7 @@ static int subs = 5;
 static int subsaliado = 5;
 static String jogador = "";
 static String computador = "";
+static int n = 0, n1 = 1;
 
 static int [][][] criatabuleiro (){
     int tabuleiro [][][] = new int [5][5][2];
@@ -29,6 +33,26 @@ static int [][][] inicializatabuleiro (int[][][] tabuleiro){
     }
 return tabuleiro;
 } 
+static void monstraTabuleiro (int [][][] tabuleiro, int n ,int f){
+    System.out.println();
+    if (f == 0){
+        System.out.println(jogador);
+    }else if (f==1){
+        System.out.println(computador);
+    }   
+    System.out.println("1+---+---+---+---+---+");
+        for (int i = 0; i < tabuleiro.length; i++) {
+            System.out.print(" |");
+            for (int j = 0; j < tabuleiro[i].length; j++) {
+
+                System.out.print(" " + tabuleiro[i][j][n] + " |");
+            }
+            System.out.println();
+            System.out.println(" +---+---+---+---+---+");
+        }
+        System.out.println("   0 | 1 | 2 | 3 | 4 ");
+        System.out.println("       COLUNA        ");
+}
 static int [][][] sorteiaPosicao (int [][][] tabuleiro){
     Random consoleR = new Random();
     for (int i =0;i < 5;i++){
@@ -40,13 +64,14 @@ return tabuleiro;
 }
 static int [][][] pedirPosicaoInicial (int [][][] tabuleiro){
     Scanner console = new Scanner (System.in);    
+    System.out.println("Posicione os seus submarinos");
     for (int i = 1;i <= 5;i++){
     System.out.print("Insira a linha: ");
     int linha = console.nextInt();    
     System.out.print("Insira a coluna: ");
     int coluna = console.nextInt();
     tabuleiro[linha][coluna][0] = 1;
-    //colocar a funcão imprime tabuleiro aqui
+//    monstraTabuleiro(tabuleiroJogador, n);
     System.out.println((5-i)+" submarinos restantes...");
 }
 return tabuleiro;
@@ -61,10 +86,14 @@ static int [][][] jogada (int [][][] tabuleiroMaquina){
     if (tabuleiroMaquina[linha][coluna][1] == 1){
         tabuleiroMaquina[linha][coluna][1] = 6;
         System.out.print("Submarino inimigo atingindo! ");
+        tabuleiroMaquina[linha][coluna][0] = 6;
         informaSub();
     } else if (tabuleiroMaquina[linha][coluna][1] == 0){
         tabuleiroMaquina[linha][coluna][1] = 9;
+        tabuleiroMaquina[linha][coluna][0] = 9;
     }
+  
+   
    return tabuleiroMaquina; 
 }
 static int [][][] jogadaMaquina(int[][][] tabuleiroJogador){
@@ -87,7 +116,8 @@ static void informaSub (){
 }
 static void informaSubAliado (){
     subsaliado = subsaliado - 1;
-    System.out.println(subs+" submarinos aliados restanstes");
+    System.out.println(subsaliado+" submarinos aliados restanstes");
+
 }
 static boolean jogarNovamente (boolean condicao1){
     Scanner console = new Scanner (System.in);
@@ -99,10 +129,9 @@ static boolean jogarNovamente (boolean condicao1){
             }
 return condicao1;
 }
-
 static void intro (){
     Scanner console = new Scanner (System.in);
-    System.out.println("Bem vindo a (!NOTguerraFria)");
+    System.out.println("Bem vindo ao (!NOTguerraFria)");
     System.out.print("Deseja ler as regras? ");
     String condicao = console.next();
     condicao = condicao.toLowerCase();
@@ -111,8 +140,9 @@ static void intro (){
         System.out.println("Os submarinos ocupam uma posição do tabuleiro. No total são *5* submarinos para cada tabuleiro");
         System.out.println("Ganha quem destruir todos os submarinos primeiro!");
     }
-    System.out.println("selecione uma nação");
-    System.out.print("Digite 1 para URSS ou 2 para U.S.A.");
+    System.out.println("selecione uma nação: ");
+    System.out.println("Digite 1 para a URSS ou");
+    System.out.println("Digite 2 para o U.S.A.");
     int opcao = console.nextInt();
     if (opcao==1){
         computador = " U.S.A. ";
@@ -126,18 +156,24 @@ public static void main(String[] args) {
     boolean condicao1 = false;
     
     do {
+        intro();
         
-        System.out.println("Destrua todos os submarinos nucleares da" +computador);
+        System.out.println("Objetivo: Destrua todos os submarinos nucleares da" +computador);
         int [][][] tabuleiroMaquina = criatabuleiro();
         tabuleiroMaquina = inicializatabuleiro(tabuleiroMaquina);
         tabuleiroMaquina = sorteiaPosicao(tabuleiroMaquina);
         int [][][] tabuleiroJogador = criatabuleiro();
         tabuleiroJogador = inicializatabuleiro(tabuleiroJogador);
+        monstraTabuleiro(tabuleiroJogador, n, n);
         tabuleiroJogador = pedirPosicaoInicial(tabuleiroJogador);
         
-        for(int i = 0; i<tabuleiroJogador.length;i++){
+        for(int i = 0; i<25;i++){
+        monstraTabuleiro(tabuleiroJogador, n, n);
+        monstraTabuleiro(tabuleiroMaquina, n, n1);
         tabuleiroMaquina = jogada(tabuleiroMaquina);
         tabuleiroJogador = jogadaMaquina(tabuleiroJogador);
+
+
         if( subs == 0){
             System.out.println("Parabéns! Você ganhou!");
             break;
